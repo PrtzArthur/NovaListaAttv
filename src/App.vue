@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 const tarefas = ref(['Tarefa 1', 'Tarefa 2', 'Tarefa 3'])
 
 const novaTarefa = ref('')
@@ -39,12 +39,23 @@ function concluirTarefa(item) {
   lista[posicao].classList.add("concluida")
 }
 
+const filtro = ref('')
+
+const tarefasFiltradas = computed (() => {
+  if (filtro.value.trim().length > 0) {
+    return tarefas.value.filter( item => item.tarefas.includes(filtro.value));
+  }
+  else {
+    return tarefas.value;
+  }
+})
+ 
 </script>
 
 <template>
   <div class="container">
     <h1>Lista de Tarefas</h1>
-    <input type="text" v-model="novaTarefa" />
+    <input type="text" v-model="novaTarefa" />  
     <button @click="addTarefa">Add</button>
     <ul>
       <li v-for="tarefa in tarefas" :key="tarefa">
@@ -71,5 +82,7 @@ div.container ul li span a {
   color: gray;
   opacity: 0.6;
 }
-
+ul {
+  list-style-type: none;
+}
 </style>
