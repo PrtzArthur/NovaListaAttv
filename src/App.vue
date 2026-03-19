@@ -68,6 +68,7 @@ const tarefasFiltradas = computed (() => {
       </li>
     </ul>
     <button @click="ordenar">Ordenar</button>
+    <input type="text" v-model="filtro" placeholder="Filtrar tarefas..." /> <button @click="tarefasFiltradas">Filtrar</button>
   </div>
 </template>
 
