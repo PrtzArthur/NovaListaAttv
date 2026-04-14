@@ -1,55 +1,21 @@
 <script setup>
 import { ref, computed } from 'vue'
-const tarefas = ref(['Tarefa 1', 'Tarefa 2', 'Tarefa 3'])
+import Item from './components/Item.vue'
+import { useTarefas } from './composables/useTarefas.js'
 
-const novaTarefa = ref('')
-const posAlterada = ref(-1)
+const {
+  tarefas,
+  novaTarefa,
+  posAlterada,
+  filtro,
+  tarefasFiltradas,
+  addTarefa,
+  delTarefa,
+  editTarefa,
+  ordenar,
+  concluirTarefa
+} = useTarefas()
 
-function addTarefa() {
-  if (posAlterada.value == -1) {
-    if (novaTarefa.value.trim().length >= 5) {
-      tarefas.value.push(novaTarefa.value)
-    }
-  }
-  else {
-    tarefas.value.splice(posAlterada.value, 1, novaTarefa.value);
-    posAlterada.value = -1;
-  }
-
-  novaTarefa.value = ''
-}
-
-function delTarefa(item) {
-  const posicao = tarefas.value.indexOf(item)
-  tarefas.value.splice(posicao, 1)
-}
-
-function editTarefa(item) {
-  posAlterada.value = tarefas.value.indexOf(item)
-  novaTarefa.value = item;
-}
-
-function ordenar() {
-  tarefas.value.sort()
-}
-
-function concluirTarefa(item) {
-  const posicao = tarefas.value.indexOf(item)
-  const lista = document.querySelectorAll(".texto")
-  lista[posicao].classList.add("concluida")
-}
-
-const filtro = ref('')
-
-const tarefasFiltradas = computed (() => {
-  if (filtro.value.trim().length > 0) {
-    return tarefas.value.filter( item => item.tarefas.includes(filtro.value));
-  }
-  else {
-    return tarefas.value;
-  }
-})
- 
 </script>
 
 <template>
@@ -58,7 +24,7 @@ const tarefasFiltradas = computed (() => {
     <input type="text" v-model="novaTarefa" />  
     <button @click="addTarefa">Add</button>
     <ul>
-      <li v-for="tarefa in tarefas" :key="tarefa">
+      <li v-for="tarefa in tarefasFiltradas" :key="tarefa">
         <span class="texto">{{ tarefa }}</span>
         <span>
           <a href="#" @click.prevent="editTarefa(tarefa)">Edit</a>
